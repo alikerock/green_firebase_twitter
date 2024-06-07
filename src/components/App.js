@@ -1,11 +1,11 @@
 import '../App.css';
+import React, { useState } from "react";
+import AppRouter from './Router';
 
 function App() {
-  return (
-    <div className="App">
-     <h1>Green Twitter</h1>
-    </div>
-  );
+  const[isLoggedIn, setIsloggedIn] = useState(false);
+  return <AppRouter isLoggedIn={isLoggedIn}/>;
+
 }
 
 export default App;
