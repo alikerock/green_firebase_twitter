@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {db} from '../firebase';
 import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore"; 
+import Post from "../components/Post";
 
 const Home = () => {
   const[post, setPost] = useState('');
@@ -50,7 +51,7 @@ const Home = () => {
       </form>
       <ul>
         {
-          posts.map(list =><li key={list.id}>{list.post}</li>)
+          posts.map(list =><Post key={list.id} postObj={list.post}/>)
         }
       </ul>
     </div>
