@@ -3,7 +3,8 @@ import {db} from '../firebase';
 import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore"; 
 import Post from "../components/Post";
 
-const Home = () => {
+const Home = ({userObj}) => {
+  
   const[post, setPost] = useState('');
   const[posts, setPosts] = useState([]);
 
@@ -16,8 +17,9 @@ const Home = () => {
     e.preventDefault();
     try {
       const docRef = await addDoc(collection(db, "posts"), {
-        post,
-        date:serverTimestamp()
+        content:post,
+        date:serverTimestamp(),
+        uid:userObj
       });
       setPost('');
       console.log("Document written with ID: ", docRef.id);
@@ -51,7 +53,7 @@ const Home = () => {
       </form>
       <ul>
         {
-          posts.map(list =><Post key={list.id} postObj={list.post}/>)
+          posts.map(list =><Post key={list.id} postObj={list.content}/>)
         }
       </ul>
     </div>
