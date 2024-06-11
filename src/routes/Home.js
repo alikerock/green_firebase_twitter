@@ -13,7 +13,7 @@ const Home = () => {
     e.preventDefault();
     try {
       const docRef = await addDoc(collection(db, "posts"), {
-        title: "Ada",
+        post,
         date:serverTimestamp()
       });
       setPost('');
