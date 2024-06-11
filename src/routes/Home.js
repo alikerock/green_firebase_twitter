@@ -49,7 +49,9 @@ const Home = () => {
         <input type="submit" value="Add Post"/>
       </form>
       <ul>
-        {}
+        {
+          posts.map(list =><li key={list.id}>{list.post}</li>)
+        }
       </ul>
     </div>
   )
