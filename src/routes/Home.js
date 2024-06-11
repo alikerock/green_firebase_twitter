@@ -4,6 +4,8 @@ import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore
 
 const Home = () => {
   const[post, setPost] = useState('');
+  const[posts, setPosts] = useState([]);
+
   const onChange = (e) =>{
     //let value = e.target.value
     const {target:{value}} = e;
@@ -26,9 +28,16 @@ const Home = () => {
   const getPosts = async () =>{
     const querySnapshot = await getDocs(collection(db, "posts"));
     querySnapshot.forEach((doc) => {
-      console.log(doc.data().post);
+      //console.log(doc.data().post);
+      const postObj = {
+        ...doc.data(),
+        id:doc.id
+      }
+      setPosts(prev => [postObj, ...prev])
     });
   }
+  console.log(posts);
+
   useEffect(()=>{
     getPosts();
   },[]);
@@ -39,6 +48,9 @@ const Home = () => {
         <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} />
         <input type="submit" value="Add Post"/>
       </form>
+      <ul>
+        {}
+      </ul>
     </div>
   )
 }
