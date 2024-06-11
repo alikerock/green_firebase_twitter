@@ -13,8 +13,8 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsloggedIn(true);
-        //const uid = user.uid;
-
+        const uid = user.uid;
+        console.log(uid);
       } else {
         // User is signed out
         setIsloggedIn(false);
