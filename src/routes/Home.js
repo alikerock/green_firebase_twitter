@@ -7,6 +7,7 @@ const Home = ({userObj}) => {
   console.log(userObj);
   const[post, setPost] = useState('');
   const[posts, setPosts] = useState([]);
+  const[attachment, setAttachment] = useState();
 
   const onChange = (e) =>{
     //let value = e.target.value
@@ -56,10 +57,26 @@ const Home = ({userObj}) => {
     //getPosts();
   },[]);
 
+  const onFileChange = (e) =>{
+    //console.log(e.target.files);
+    const {target:{files}} = e;
+    const theFile = files[0];
+    //console.log(theFile);
+    const reader = new FileReader();
+    reader.onloadend = (e) =>{
+      console.log(e.target.result);
+      const {target:{result}} = e;
+      setAttachment(result);
+    }
+    reader.readAsDataURL(theFile);
+  }
+
   return(
     <div>
       <form action="" onSubmit={onSubmit}>
         <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} />
+        <input type="file" accept="image/*" onChange={onFileChange} />
+        {attachment && <img src={attachment} width="50" alt=""/>}
         <input type="submit" value="Add Post"/>
       </form>
       <ul>
