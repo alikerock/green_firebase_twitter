@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {db} from '../firebase';
-import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore"; 
+import { collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "firebase/firestore"; 
 import Post from "../components/Post";
 
 const Home = ({userObj}) => {
-  
+  console.log(userObj);
   const[post, setPost] = useState('');
   const[posts, setPosts] = useState([]);
 
@@ -28,6 +28,7 @@ const Home = ({userObj}) => {
     }
     
   }
+  /*
   const getPosts = async () =>{
     const querySnapshot = await getDocs(collection(db, "posts"));
     querySnapshot.forEach((doc) => {
@@ -39,10 +40,20 @@ const Home = ({userObj}) => {
       setPosts(prev => [postObj, ...prev])
     });
   }
+  */
   console.log(posts);
 
   useEffect(()=>{
-    getPosts();
+    const q = query(collection(db, "posts"),orderBy('date','desc'));
+    onSnapshot(q, (querySnapshot) => {  
+      const postArr = querySnapshot.docs.map(doc=>({
+        id:doc.id,
+        ...doc.data()
+      }));      
+      setPosts(postArr);
+    });
+
+    //getPosts();
   },[]);
 
   return(
@@ -53,7 +64,7 @@ const Home = ({userObj}) => {
       </form>
       <ul>
         {
-          posts.map(list =><Post key={list.id} postObj={list.content}/>)
+          posts.map(list =><Post key={list.id} postObj={list} isOwener={list.uid === userObj}/>)
         }
       </ul>
     </div>
