@@ -1,11 +1,14 @@
 import React from "react";
+import {db} from '../firebase';
+import { doc, deleteDoc } from "firebase/firestore";
+
 
 const Post = ({postObj, isOwener})=>{
   console.log(postObj);
-  const deletePost = () =>{
+  const deletePost = async () =>{
     const question = window.confirm('정말 삭제할까요?');
     if(question){
-
+      await deleteDoc(doc(db, "posts", postObj.id));
     }
   }
   return(
