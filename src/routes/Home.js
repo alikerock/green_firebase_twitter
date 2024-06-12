@@ -23,6 +23,7 @@ const Home = ({userObj}) => {
   }
   const onSubmit = async (e) =>{
     e.preventDefault();
+    const inputFile = document.querySelector('#file');
 
     const fileRef = ref(storage, `${userObj}/${uuidv4()}}`);
 
@@ -37,8 +38,9 @@ const Home = ({userObj}) => {
       setAttachment(''); //미리보기 이미지 삭제
     }
     try {
-      console.log(fileRef);
-      if(fileRef){
+      console.log(inputFile.value);
+      
+      if(inputFile.value){
         console.log('파일 있을 때');
         uploadString(fileRef, attachment, 'data_url').then(async (snapshot) => {
           attachmentUrl = await getDownloadURL(fileRef);         
