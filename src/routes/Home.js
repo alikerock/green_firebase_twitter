@@ -70,15 +70,27 @@ const Home = ({userObj}) => {
     }
     reader.readAsDataURL(theFile);
   }
-
+  const onClearFile = ()=>{
+    setAttachment(null);
+    document.querySelector('#file').value='';
+  }
   return(
     <div>
       <form action="" onSubmit={onSubmit}>
-        <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} />
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        {attachment && <img src={attachment} width="50" alt=""/>}
-        <input type="submit" value="Add Post"/>
+        <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} required />
+        <input type="file" accept="image/*" onChange={onFileChange} id="file"/>
+        {
+        attachment && 
+        <>
+          <img src={attachment} width="50" alt=""/>        
+          <button type="button" onClick={onClearFile}>파일 업로드 취소</button>
+        </>
+        }
+        <p>
+          <input type="submit" value="Add Post"/>
+        </p>
       </form>
+      <hr/>
       <ul>
         {
           posts.map(list =><Post key={list.id} postObj={list} isOwener={list.uid === userObj}/>)
