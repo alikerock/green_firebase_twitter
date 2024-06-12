@@ -42,7 +42,12 @@ const Post = ({postObj, isOwener})=>{
         ): (
       <>
         <h4>{postObj.content}</h4>
-        {
+        {         
+         postObj.attachmentUrl !== '' && (
+          <img src={postObj.attachmentUrl} width="200" alt=""/>      
+          )
+        }
+        {         
           isOwener && (
           <> 
             <button onClick={toggleEditMode}>수정</button>
