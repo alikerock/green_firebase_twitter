@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {db} from '../firebase';
 import { collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "firebase/firestore"; 
+import { getStorage, ref, uploadString} from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 import Post from "../components/Post";
 
+
 const Home = ({userObj}) => {
+  const storage = getStorage();
+  const storageRef = ref(storage);
   console.log(userObj);
   const[post, setPost] = useState('');
   const[posts, setPosts] = useState([]);
@@ -16,6 +21,13 @@ const Home = ({userObj}) => {
   }
   const onSubmit = async (e) =>{
     e.preventDefault();
+    const fileRef = ref(storage, `${userObj}/${uuidv4()}}`);
+    // Data URL string
+   
+    uploadString(fileRef, attachment, 'data_url').then((snapshot) => {
+      console.log('파일 업로드 완료');
+    });
+    /*
     try {
       const docRef = await addDoc(collection(db, "posts"), {
         content:post,
@@ -27,6 +39,7 @@ const Home = ({userObj}) => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+    */
     
   }
   /*
