@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {db} from '../firebase';
 import { collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "firebase/firestore"; 
-import { getStorage, ref, uploadString} from "firebase/storage";
+import { getStorage, ref, uploadString, getDownloadURL} from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 import Post from "../components/Post";
 
@@ -13,6 +13,8 @@ const Home = ({userObj}) => {
   const[post, setPost] = useState('');
   const[posts, setPosts] = useState([]);
   const[attachment, setAttachment] = useState();
+  let attachmentUrl = '';
+  
 
   const onChange = (e) =>{
     //let value = e.target.value
@@ -21,25 +23,37 @@ const Home = ({userObj}) => {
   }
   const onSubmit = async (e) =>{
     e.preventDefault();
+
     const fileRef = ref(storage, `${userObj}/${uuidv4()}}`);
-    // Data URL string
-   
-    uploadString(fileRef, attachment, 'data_url').then((snapshot) => {
-      console.log('파일 업로드 완료');
-    });
-    /*
-    try {
-      const docRef = await addDoc(collection(db, "posts"), {
+
+    const addPost = async() =>{
+      await addDoc(collection(db, "posts"), {
         content:post,
         date:serverTimestamp(),
-        uid:userObj
+        uid:userObj,
+        attachmentUrl
       });
-      setPost('');
-      console.log("Document written with ID: ", docRef.id);
+      setPost(''); //글 삭제
+      setAttachment(''); //미리보기 이미지 삭제
+    }
+    try {
+      console.log(fileRef);
+      if(fileRef){
+        console.log('파일 있을 때');
+        uploadString(fileRef, attachment, 'data_url').then(async (snapshot) => {
+          attachmentUrl = await getDownloadURL(fileRef);         
+          addPost();
+         });
+      } else{
+        console.log('파일 없을 때');
+        addPost();
+      }
+
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-    */
+
+
     
   }
   /*
