@@ -36,23 +36,19 @@ const Home = ({userObj}) => {
       });
       setPost(''); //글 삭제
       setAttachment(''); //미리보기 이미지 삭제
+      inputFile.value = '';
     }
-    try {
-      console.log(inputFile.value);
-      
+    try {      
       if(inputFile.value){
-        console.log('파일 있을 때');
         uploadString(fileRef, attachment, 'data_url').then(async (snapshot) => {
           attachmentUrl = await getDownloadURL(fileRef);         
           addPost();
          });
-      } else{
-        console.log('파일 없을 때');
+      } else{  
         addPost();
       }
-
     } catch (e) {
-      console.error("Error adding document: ", e);
+      alert("글 등록 실패");
     }
 
 
